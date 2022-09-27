@@ -6,6 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "amphp/websocket-client": "^1.0",
+        "graphp/algorithms": "^0.8.2",
+        "graphp/graphviz": "^0.2.2",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.5.4",
         "laravel/framework": "^9.19",
