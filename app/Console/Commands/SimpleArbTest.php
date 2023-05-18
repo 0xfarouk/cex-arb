@@ -78,6 +78,8 @@ class SyncExchangeCommand extends Command
 
         $arbitrage->imageFromGraph($priceGraph, 'price-g-');
         $arbitrage->imageFromGraph($arbGraph, 'arb-g-');
-        dump(Arbitrage::multiplyEdges($arbGraph));
+        $this->info('gain: ' . Arbitrage::multiplyEdges($arbGraph));
+
+        return 0;
     }
 }
