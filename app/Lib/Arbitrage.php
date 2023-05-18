@@ -16,9 +16,13 @@ class Arbitrage
     protected Graph $arbGraphWithNegativeLogEdges;
     protected Graph $arbGraph;
 
-    public function __construct($rawPriceData)
+    protected $imageDestiantion;
+
+    public function __construct($rawPriceData, $imageDestination = '/var/tmp/')
     {
         $this->setPriceData($rawPriceData);
+
+        $this->imageDestiantion = $imageDestination;
     }
 
     public function setPriceData($priceData)
@@ -144,7 +148,7 @@ class Arbitrage
         $graphViz = new GraphViz;
         $img = $graphViz->createImageFile($graph);
 
-        $destination = '/var/tmp/src/' . $imagePrefix . Carbon::now()->format('ymdHis') . '.png';
+        $destination = $this->imageDestiantion . $imagePrefix . Carbon::now()->format('ymdHis') . '.png';
         copy($img, $destination);
 
         return $destination;
