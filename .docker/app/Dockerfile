@@ -7,8 +7,8 @@ FROM php:8.1.1-apache
 
 RUN apt-get update -y  \
     && apt-get install -y --no-install-recommends \
-    graphviz libpng-dev libzip-dev libicu-dev libfreetype6-dev libjpeg62-turbo-dev \
-    default-mysql-client  git zip unzip wget gnupg2
+    graphviz libpng-dev libzip-dev libicu-dev libfreetype6-dev libjpeg62-turbo-dev libgmp-dev \
+    default-mysql-client git zip unzip wget gnupg2
 
 RUN apt-get clean \
     && apt-get autoremove -y \
@@ -23,7 +23,7 @@ RUN docker-php-ext-configure zip; \
     docker-php-ext-configure mysqli --with-mysqli=mysqlnd; \
     docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd; \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg; \
-    docker-php-ext-install -j "$(nproc)" gd intl mysqli opcache pdo_mysql zip exif
+    docker-php-ext-install -j "$(nproc)" gd intl mysqli opcache pdo_mysql zip exif bcmath gmp
 
 RUN mv /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
