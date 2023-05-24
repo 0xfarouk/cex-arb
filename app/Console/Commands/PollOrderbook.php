@@ -16,7 +16,7 @@ class PollOrderbook extends Command
      *
      * @var string
      */
-    protected $signature = 'app:poll-orderbook {exchange}';
+    protected $signature = 'app:poll-orderbook {exchange} {--delay=5}';
 
     /**
      * The console command description.
@@ -31,6 +31,13 @@ class PollOrderbook extends Command
     public function handle()
     {
         $exchangeId = $this->argument('exchange');
+
+        $delay = $this->option('delay') ;
+        foreach(range(0, $delay) as $i) {
+            Log::info('PollOrderbook::handle | SLEEPING ' . $exchangeId . ': ' . $delay - $i);
+            sleep(1);
+        }
+
         $exchangeClass = '\\ccxt\\pro\\' . $exchangeId;
 
         Log::info('PollOrderbook::handle | Loading ' . $exchangeId);
@@ -45,7 +52,41 @@ class PollOrderbook extends Command
         shuffle($symbols);
         $symbols = [
             array_pop($symbols),
-            array_pop($symbols)
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
+            array_pop($symbols),
         ];
 
         $loop = function ($exchange, $symbol) {
@@ -54,13 +95,15 @@ class PollOrderbook extends Command
             while (true) {
                 $orderbook = yield $exchange->watch_order_book($symbol, 5);
 
-                if (is_object($orderbook)) {
-                    Log::debug('PollOrderbook::handle | Order book is object: ' . $exchange->id . ': ' . $symbol);
-                    $orderbook = json_encode($orderbook);
-                } else {
-                    Log::debug('PollOrderbook::handle | Order book is NOT object: ' . $exchange->id . ': ' . $symbol);
-                    $orderbook = json_encode($orderbook);
-                }
+                // TODO: orderbook can be object or non object (probably array)
+                $orderbook = json_encode($orderbook);
+//                if (is_object($orderbook)) {
+//                    Log::debug('PollOrderbook::handle | Order book is object: ' . $exchange->id . ': ' . $symbol);
+//                    $orderbook = json_encode($orderbook);
+//                } else {
+//                    Log::debug('PollOrderbook::handle | Order book is NOT object: ' . $exchange->id . ': ' . $symbol);
+//                    $orderbook = json_encode($orderbook);
+//                }
 
                 $record = AppOrderbook::where(['exchange' => $exchange->id, 'symbol' => $symbol])->first();
                 if (!$record) {

@@ -54,12 +54,15 @@ class Manager extends Command
         ];
 
         $pool = Process::pool(function (Pool $pool) use ($exchangeIds) {
+            $delayExecution = 0;
+
             foreach ($exchangeIds as $exchangeId) {
                 $pool
                     ->as($exchangeId)
                     ->forever()
                     //->input('binance')
-                    ->command('php artisan app:poll-orderbook ' . $exchangeId);
+                    //->command('php artisan app:poll-orderbook ' . $exchangeId)
+                    ->command(sprintf('php artisan app:poll-orderbook %s --delay=%s', $exchangeId, $delayExecution+=5));
             }
         })->start(function (string $type, string $output, string $key) {
             Log::debug(sprintf('Manager::handle | POOL OUTPUT -> Type: %s | Output: %s | Key: %s', $type, $output, $key));
