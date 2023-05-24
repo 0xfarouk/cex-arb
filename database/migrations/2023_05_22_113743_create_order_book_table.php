@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('sqlite')->create('prices', function (Blueprint $table) {
+        Schema::connection('mysql')->create('order_book', function (Blueprint $table) {
             $table->id();
             $table->string('exchange');
-            $table->string('from');
-            $table->string('to');
-            $table->decimal('price', 27, 18, true);
+            $table->string('symbol');
+            $table->text('order_book');
             $table->timestamps();
+
+            $table->unique(['exchange', 'symbol']);
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('sqlite')->dropIfExists('prices');
+        Schema::connection('mysql')->dropIfExists('order_book');
     }
 };
