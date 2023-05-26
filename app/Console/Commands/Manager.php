@@ -28,8 +28,6 @@ class Manager extends Command
      */
     public function handle()
     {
-         //= ['binance', 'bitget'];
-
         $desiredCoins = [
             'USDC',
             'USDT',
@@ -99,16 +97,17 @@ class Manager extends Command
             'upbit'
         ];
 
-        $pool = Process::pool(function (Pool $pool) use ($exchangeIds) {
+        $desiredCoinsOptions = implode(' --coin=', $desiredCoins);
+
+        $pool = Process::pool(function (Pool $pool) use ($exchangeIds, $desiredCoins, $desiredCoinsOptions) {
             $delayExecution = 0;
+            $commandDef = 'php artisan app:poll-orderbook %s --coin=%s --bootdelay=%s';
 
             foreach ($exchangeIds as $exchangeId) {
                 $pool
                     ->as($exchangeId)
                     ->forever()
-                    //->input('binance')
-                    //->command('php artisan app:poll-orderbook ' . $exchangeId)
-                    ->command(sprintf('php artisan app:poll-orderbook %s --delay=%s', $exchangeId, $delayExecution+=5));
+                    ->command(sprintf($commandDef, $exchangeId, $desiredCoinsOptions, $delayExecution += 5));
             }
         })->start(function (string $type, string $output, string $key) {
             Log::debug(sprintf('Manager::handle | POOL OUTPUT -> Type: %s | Output: %s | Key: %s', $type, $output, $key));
@@ -117,18 +116,10 @@ class Manager extends Command
         $results = $pool->wait();
 
         return $results['binance']->output();
+    }
 
-//        $process = Process::path(base_path('/'))
-//            ->forever()
-//            ->start('php artisan app:dummy-process', function (string $type, string $output) {
-//                //Log::info($type);
-//                //Log::info($output);
-//                //$this->info($type);
-//                //$this->warn($output);
-//            });
-//
-//        dump($process->wait());
-
-        Log::info('After async init process');
+    public function __destruct()
+    {
+        $this->error('DESTRUC');
     }
 }

@@ -16,54 +16,7 @@ class PollOrderbook extends Command
      *
      * @var string
      */
-    protected $signature = 'app:poll-orderbook {exchange} {--delay=5}';
-
-
-    protected $desiredCoins = [
-        'USDC',
-        'USDT',
-        'DAI',
-        'TUSC',
-        //
-        'BTC',
-        'ETH',
-        'BNB',
-        'SOL',
-        'XRP',
-        'ADA',
-        'DOGE',
-        'MATIC',
-        'SOL',
-        'TRX',
-        'LTC',
-        'DOT',
-        'SHIB',
-        'AVAX',
-        'LEO',
-        'LINK',
-        'ATOM',
-        'UNI',
-        'OKB',
-        'XMR',
-        'ETC',
-        'XLM',
-        'TON',
-        'BCH',
-        'ICP',
-        'FIL',
-        'LDO',
-        'HBAR',
-        'APT',
-        'CRO',
-        'ARB',
-        'NEAR',
-        'VET',
-        'APE',
-        'QNT',
-        'ALGO',
-        'RNDR',
-        'GRT',
-    ];
+    protected $signature = 'app:poll-orderbook {exchange} {--bootdelay=5} {--coin=*}';
 
     /**
      * The console command description.
@@ -77,6 +30,7 @@ class PollOrderbook extends Command
      */
     public function handle()
     {
+        $desiredCoins = $this->option('coin') ?? ['BTC', 'ETH'];
         $exchangeId = $this->argument('exchange');
 
         $delay = $this->option('delay');
@@ -95,7 +49,7 @@ class PollOrderbook extends Command
             'enableRateLimit' => true,
         ]);
 
-        $symbols = $this->pickSymbols($this->desiredCoins, $this->symbols);
+        $symbols = $this->pickSymbols($desiredCoins, $this->symbols);
 
         $loop = function ($exchange, $symbol) {
             Log::info('PollOrderbook::handle | Watch: ' . $exchange->id . ': ' . $symbol);
