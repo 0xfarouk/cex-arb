@@ -33,9 +33,9 @@ class PollOrderbook extends Command
         $desiredCoins = $this->option('coin') ?? ['BTC', 'ETH'];
         $exchangeId = $this->argument('exchange');
 
-        $delay = $this->option('delay');
-        foreach (range(0, $delay) as $i) {
-            Log::info('PollOrderbook::handle | SLEEPING ' . $exchangeId . ': ' . $delay - $i);
+        $bootDelay = $this->option('bootdelay');
+        foreach (range(0, $bootDelay) as $i) {
+            Log::info('PollOrderbook::handle | SLEEPING ' . $exchangeId . ': ' . $bootDelay - $i);
             sleep(1);
         }
 
@@ -45,13 +45,18 @@ class PollOrderbook extends Command
         $this->load();
         Log::info('PollOrderbook::handle | Loaded ' . $exchangeId);
 
-        $exchange = new $exchangeClass([
-            'enableRateLimit' => true,
-        ]);
-
+        $exchange = new $exchangeClass(['enableRateLimit' => true]);
         $symbols = $this->pickSymbols($desiredCoins, $this->symbols);
 
-        $loop = function ($exchange, $symbol) {
+        foreach ($symbols as $symbol) {
+            coroutine($this->loop(), $exchange, $symbol);
+        }
+
+        Log::info('PollOrderbook::handle | EXIT: ' . $exchangeId);
+    }
+
+    public function loop() {
+        return function ($exchange, $symbol) {
             Log::info('PollOrderbook::handle | Watch: ' . $exchange->id . ': ' . $symbol);
 
             while (true) {
@@ -78,12 +83,6 @@ class PollOrderbook extends Command
                 $record->save();
             }
         };
-
-        foreach ($symbols as $symbol) {
-            coroutine($loop, $exchange, $symbol);
-        }
-
-        Log::info('PollOrderbook::handle | EXIT: ' . $exchangeId);
     }
 
     /**
