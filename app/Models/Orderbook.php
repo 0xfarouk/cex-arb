@@ -13,9 +13,7 @@ class Orderbook extends Model
 
     protected $guarded = ['id'];
 
-    //protected $connection = 'sqlite';
-
 //    protected $casts = [
-//        'order_book' => 'json'
+//        'order_book' => 'array'
 //    ];
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('exchange');
             $table->string('symbol');
-            $table->text('order_book');
+            $table->json('order_book');
             $table->timestamps();
 
             $table->unique(['exchange', 'symbol']);

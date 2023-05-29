@@ -62,16 +62,6 @@ class PollOrderbook extends Command
             while (true) {
                 $orderbook = yield $exchange->watch_order_book($symbol, 5);
 
-                // TODO: orderbook can be object or non object (probably array)
-                $orderbook = json_encode($orderbook);
-//                if (is_object($orderbook)) {
-//                    Log::debug('PollOrderbook::handle | Order book is object: ' . $exchange->id . ': ' . $symbol);
-//                    $orderbook = json_encode($orderbook);
-//                } else {
-//                    Log::debug('PollOrderbook::handle | Order book is NOT object: ' . $exchange->id . ': ' . $symbol);
-//                    $orderbook = json_encode($orderbook);
-//                }
-
                 $record = AppOrderbook::where(['exchange' => $exchange->id, 'symbol' => $symbol])->first();
                 if (!$record) {
                     $record = new AppOrderbook;
@@ -79,7 +69,7 @@ class PollOrderbook extends Command
                     $record->symbol = $symbol;
                 }
 
-                $record->order_book = $orderbook;
+                $record->order_book = json_encode($orderbook);
                 $record->save();
             }
         };
