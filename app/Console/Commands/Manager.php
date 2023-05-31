@@ -36,42 +36,42 @@ class Manager extends Command
             //
             'BTC',
             'ETH',
-//            'BNB',
-//            'SOL',
-//            'XRP',
-//            'ADA',
-//            'DOGE',
-//            'MATIC',
-//            'SOL',
-//            'TRX',
-//            'LTC',
-//            'DOT',
-//            'SHIB',
-//            'AVAX',
-//            'LEO',
-//            'LINK',
-//            'ATOM',
-//            'UNI',
-//            'OKB',
-//            'XMR',
-//            'ETC',
-//            'XLM',
-//            'TON',
-//            'BCH',
-//            'ICP',
-//            'FIL',
-//            'LDO',
-//            'HBAR',
-//            'APT',
-//            'CRO',
-//            'ARB',
-//            'NEAR',
-//            'VET',
-//            'APE',
-//            'QNT',
-//            'ALGO',
-//            'RNDR',
-//            'GRT',
+            'BNB',
+            'SOL',
+            'XRP',
+            'ADA',
+            'DOGE',
+            'MATIC',
+            'SOL',
+            'TRX',
+            'LTC',
+            'DOT',
+            'SHIB',
+            'AVAX',
+            'LEO',
+            'LINK',
+            'ATOM',
+            'UNI',
+            'OKB',
+            'XMR',
+            'ETC',
+            'XLM',
+            'TON',
+            'BCH',
+            'ICP',
+            'FIL',
+            'LDO',
+            'HBAR',
+            'APT',
+            'CRO',
+            'ARB',
+            'NEAR',
+            'VET',
+            'APE',
+            'QNT',
+            'ALGO',
+            'RNDR',
+            'GRT',
         ];
 
         $exchangeIds = [
@@ -97,6 +97,9 @@ class Manager extends Command
             'upbit'
         ];
 
+//        shuffle($desiredCoins);
+//        $desiredCoins = array_slice($desiredCoins, 0, 14);
+
         $desiredCoinsOptions = implode(' --coin=', $desiredCoins);
 
         $pool = Process::pool(function (Pool $pool) use ($exchangeIds, $desiredCoins, $desiredCoinsOptions) {
@@ -107,7 +110,7 @@ class Manager extends Command
                 $pool
                     ->as($exchangeId)
                     ->forever()
-                    ->command(sprintf($commandDef, $exchangeId, $desiredCoinsOptions, $delayExecution += 5));
+                    ->command(sprintf($commandDef, $exchangeId, $desiredCoinsOptions, $delayExecution += 2));
             }
         })->start(function (string $type, string $output, string $key) {
             Log::debug(sprintf('Manager::handle | POOL OUTPUT -> Type: %s | Output: %s | Key: %s', $type, $output, $key));

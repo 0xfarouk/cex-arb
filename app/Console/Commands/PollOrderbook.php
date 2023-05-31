@@ -95,6 +95,7 @@ class PollOrderbook extends Command
 
             if (in_array($from, $desiredCoins) && in_array($to, $desiredCoins)) {
                 $finalSymbols[] = $from . '/' . $to;
+                $finalSymbols[] = $to . '/' . $from;
             }
         }
 

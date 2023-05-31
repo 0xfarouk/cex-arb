@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Lib\Arbitrage;
 use Illuminate\Console\Command;
 
-class SyncExchangeCommand extends Command
+class SimpleArbTest extends Command
 {
     /**
      * The name and signature of the console command.

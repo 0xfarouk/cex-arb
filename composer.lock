@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be0fcd2a9d8638fb4bff1cba2a9be213",
+    "content-hash": "37a5c166b725bcf16bdb8ecba906e1ac",
     "packages": [
         {
             "name": "amphp/amp",
@@ -8373,6 +8373,68 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/2.2.6"
             },
             "time": "2023-01-03T09:29:04+00:00"
+        },
+        {
+            "name": "vkovic/laravel-commando",
+            "version": "v0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vkovic/laravel-commando.git",
+                "reference": "c50a9db0d9339304bf0f1d96fba964be18883b63"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vkovic/laravel-commando/zipball/c50a9db0d9339304bf0f1d96fba964be18883b63",
+                "reference": "c50a9db0d9339304bf0f1d96fba964be18883b63",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "laravel/framework": "8.*",
+                "orchestra/database": "6.*",
+                "orchestra/testbench": "6.*",
+                "phpunit/phpunit": "^9.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Vkovic\\LaravelCommando\\Providers\\CommandoServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Vkovic\\LaravelCommando\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vladimir Ković",
+                    "email": "vlada.kovic@gmail.com"
+                }
+            ],
+            "description": "Collection of handy Laravel artisan commands that most projects needs",
+            "keywords": [
+                "artisan",
+                "commands",
+                "console",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/vkovic/laravel-commando/issues",
+                "source": "https://github.com/vkovic/laravel-commando/tree/v0.2.1"
+            },
+            "time": "2022-04-10T18:40:13+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

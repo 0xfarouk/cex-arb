@@ -8,7 +8,7 @@ FROM php:8.1.1-apache
 RUN apt-get update -y  \
     && apt-get install -y --no-install-recommends \
     graphviz libpng-dev libzip-dev libicu-dev libfreetype6-dev libjpeg62-turbo-dev libgmp-dev \
-    default-mysql-client git zip unzip wget gnupg2
+    default-mysql-client htop git zip unzip wget gnupg2
 
 RUN apt-get clean \
     && apt-get autoremove -y \
