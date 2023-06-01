@@ -30,8 +30,8 @@ class ArbProvider extends Command
         $query = "
             SELECT
                 symbol,
-                (SELECT CONCAT(exchange, ': ', ask) as tmp1 FROM order_book_peaks WHERE symbol = tmp.symbol ORDER BY ask LIMIT 1) lask,
-                (SELECT CONCAT(exchange, ': ', bid) as tmp1 FROM order_book_peaks WHERE symbol = tmp.symbol ORDER BY bid DESC LIMIT 1) hbid
+                (SELECT CONCAT(exchange, ':', ask) as tmp1 FROM order_book_peaks WHERE symbol = tmp.symbol ORDER BY ask LIMIT 1) lask,
+                (SELECT CONCAT(exchange, ':', bid) as tmp1 FROM order_book_peaks WHERE symbol = tmp.symbol ORDER BY bid DESC LIMIT 1) hbid
             FROM (SELECT DISTINCT symbol FROM order_book_peaks) tmp
         ";
 
@@ -57,34 +57,18 @@ class ArbProvider extends Command
 
             $arbitrage = new Arbitrage($priceData, storage_path('app/'));
 
-            //$priceGraph = $arbitrage->getPriceGraph();
-            //$arbitrage->imageFromGraph($priceGraph, 'price-g-');
-            //
-            //$priceGraphNeg = $arbitrage->getPriceGraphWithNegativeLogEdges();
-            //$arbitrage->imageFromGraph($priceGraphNeg, 'price-g-neg-');
-            //
-            //$arbGrapNeg = $arbitrage->getArbGraphWithNegativeLogEdges();
-            //$arbitrage->imageFromGraph($arbGrapNeg, 'arb-g-neg-');
-
             try {
                 $arbGraph = $arbitrage->getArbGraph();
-                //$priceGraph = $arbitrage->getPriceGraph();
-
-                //$arbitrage->imageFromGraph($priceGraph, 'price-g-');
-
                 $gain = Arbitrage::multiplyEdges($arbGraph);
 
                 if ($gain > 1.1) {
-
-
-
                     $this->info('gain: ' . $gain);
                 } else {
                     $this->line('.');
                 }
 
                 if ($gain > 2) {
-                    $arbitrage->imageFromGraph($arbGraph, 'arb-g-');
+                    //$arbitrage->imageFromGraph($arbGraph, 'arb-g-');
                 }
             } catch (\Exception $e) {
                 $this->warn($e->getMessage());

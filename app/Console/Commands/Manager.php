@@ -97,9 +97,6 @@ class Manager extends Command
             'upbit'
         ];
 
-//        shuffle($desiredCoins);
-//        $desiredCoins = array_slice($desiredCoins, 0, 14);
-
         $desiredCoinsOptions = implode(' --coin=', $desiredCoins);
 
         $pool = Process::pool(function (Pool $pool) use ($exchangeIds, $desiredCoins, $desiredCoinsOptions) {
@@ -118,11 +115,11 @@ class Manager extends Command
 
         $results = $pool->wait();
 
-        return $results['binance']->output();
+        return $results[$exchangeIds[0]]->output();
     }
 
     public function __destruct()
     {
-        Log::debug('DESTRUCT');
+        Log::debug('DESTRUCT: ' . get_class($this));
     }
 }

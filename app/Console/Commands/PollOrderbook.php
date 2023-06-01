@@ -11,6 +11,14 @@ class PollOrderbook extends Command
 {
     protected $symbols = [];
 
+    protected $exceptions = [
+        'bitmart' => [
+            'LEO' // not standard leo coin
+        ]
+    ];
+
+    protected $exchangeId;
+
     /**
      * The name and signature of the console command.
      *
@@ -32,6 +40,7 @@ class PollOrderbook extends Command
     {
         $desiredCoins = $this->option('coin') ?? ['BTC', 'ETH'];
         $exchangeId = $this->argument('exchange');
+        $this->exchangeId = $exchangeId;
 
         $bootDelay = $this->option('bootdelay');
         foreach (range(0, $bootDelay) as $i) {
@@ -92,6 +101,18 @@ class PollOrderbook extends Command
             }
 
             [$from, $to] = explode('/', $availableSymbol);
+
+            // If exchange->coin is in exception, skip it
+            if (
+                isset($this->exceptions[$this->exchangeId])
+                && (
+                    in_array($from, $this->exceptions[$this->exchangeId])
+                    || in_array($to, $this->exceptions[$this->exchangeId])
+                )) {
+
+                Log::debug('PollOrderbook::pickSymbols | SKIPPING: ' . $this->exchangeId . ': ' . $from . '/' . $to);
+                continue;
+            }
 
             if (in_array($from, $desiredCoins) && in_array($to, $desiredCoins)) {
                 $finalSymbols[] = $from . '/' . $to;
