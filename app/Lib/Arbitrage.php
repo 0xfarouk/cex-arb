@@ -143,7 +143,7 @@ class Arbitrage
         return $this->arbGraph = $graph;
     }
 
-    public function imageFromGraph(Graph $graph, $imagePrefix = '')
+    public function imageFromGraph(Graph $graph, $imagePrefix = '', $additionalText = null)
     {
         $graphViz = new GraphViz;
         $img = $graphViz->createImageFile($graph);
@@ -151,7 +151,29 @@ class Arbitrage
         $destination = $this->imageDestiantion . $imagePrefix . Carbon::now()->format('ymdHis') . '.png';
         copy($img, $destination);
 
+        if ($additionalText !== null) {
+            $this->addTextToImage($destination, $additionalText);
+        }
+
         return $destination;
+    }
+
+    public function addTextToImage($imgPath, $text = '%placeholder%')
+    {
+        // Create Image From Existing File
+        $image = imagecreatefrompng($imgPath);
+
+        // Allocate A Color For The Text
+        $textColor = imagecolorallocate($image, 0, 0, 0);
+
+        // Print Text On Image
+        imagettftext($image, 10, 0, 4, 14, $textColor, __DIR__ . '/roboto.ttf', $text);
+
+        // Send Image to Browser
+        imagepng($image, $imgPath);
+
+        // Clear Memory
+        imagedestroy($image);
     }
 
     public static function multiplyEdges(Graph $graph)
